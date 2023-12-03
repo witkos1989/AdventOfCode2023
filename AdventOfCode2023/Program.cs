@@ -1,6 +1,6 @@
-﻿using AdventOfCode2023.Day2;
+﻿using AdventOfCode2023.Day3;
 
-CubeConundrum cubeConundrum = new();
-int[] results = cubeConundrum.Results();
-Console.WriteLine("Day 2 results: First puzzle = {0}; Second puzzle = {1};", results[0], results[1]);
+GearRatios adventOfCode23 = new();
+int[] results = adventOfCode23.Results();
+Console.WriteLine("Results: First puzzle = {0}; Second puzzle = {1};", results[0], results[1]);
 Console.ReadLine();
