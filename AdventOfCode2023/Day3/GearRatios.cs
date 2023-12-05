@@ -1,6 +1,6 @@
 ﻿namespace AdventOfCode2023.Day3;
 
-public class GearRatios
+public sealed class GearRatios
 {
     private readonly string[] _schematic;
 

@@ -1,6 +1,6 @@
 ﻿namespace AdventOfCode2023.Day4;
 
-public class Scratchcards
+public sealed class Scratchcards
 {
 	private readonly List<Scratchcard> _cards;
 
