@@ -36,26 +36,14 @@ public class Almanac
     public long LowestSeedsRangeLocation()
     {
         List<long> seeds = SeedsRange().ToList();
-        Dictionary<int, long> correspondingVals = new();
-        int sqrtLength = (int)Math.Sqrt(seeds.Count);
+        List<long> approxVals = CorrespondingSoil(seeds).ToList();
+        long index = seeds[approxVals.IndexOf(approxVals.Min())];
 
-        for (int i = 0; i < seeds.Count; i += sqrtLength)
-            correspondingVals.Add(i, CorrespondingSoil(seeds[i]));
-
-        int tempMinimal = correspondingVals.MinBy(v => v.Value).Key;
-        List<long> results = new();
-
-        for (int i = tempMinimal - sqrtLength; i < tempMinimal + sqrtLength; i ++)
-            results.Add(CorrespondingSoil(seeds[i]));
-
-        return results.Min();
+        return CorrespondingSoil(Range(index - seeds.Count, index + seeds.Count).ToList()).Min();
     }
 
     private IEnumerable<long> CorrespondingSoil(List<long> seeds) =>
         seeds.Select(seed => CorrespondingFertilizer(Convert(Find(_seedToSoilMap, seed), seed)));
-
-    private long CorrespondingSoil(long seed) =>
-        CorrespondingFertilizer(Convert(Find(_seedToSoilMap, seed), seed));
 
     private long CorrespondingFertilizer(long seed) =>
         CorrespondingWater(Convert(Find(_soilToFertilizerMap, seed), seed));
@@ -84,7 +72,13 @@ public class Almanac
     private IEnumerable<long> SeedsRange()
     {
         for (int i = 0; i < _seeds.Count; i += 2)
-            for (long j = _seeds[i]; j < _seeds[i] + _seeds[i + 1]; j++)
+            for (long j = _seeds[i]; j < _seeds[i] + _seeds[i + 1]; j += (int)Math.Sqrt(_seeds[i + 1]))
                 yield return j;
+    }
+
+    private static IEnumerable<long> Range(long start, long end)
+    {
+        for (long i = start; i < end; i++)
+            yield return i;
     }
 }
