@@ -33,31 +33,11 @@ public sealed class WaitForIt
         return results;
     }
 
-    private static long MultiplyRacesWins(List<long> times, List<long> distances)
-    {
-        long result = 1;
+    private static long MultiplyRacesWins(List<long> times, List<long> distances) =>
+        times.Select((time, i) => Race(time, distances[i])).Aggregate((a, b) => a * b);
 
-        for (int i = 0; i < times.Count; i++)
-            result *= Race(times[i], distances[i]);
-
-        return result;
-    }
-    
-    private static long Race(long time, long distance)
-    {
-        long count = 0;
-
-        for (long i = 0; i <= time; i++)
-        {
-            long remainingTime = time - i;
-            long totalDistance = i * remainingTime;
-
-            if (totalDistance > distance)
-                count++;
-        }
-
-        return count;
-    }
+    private static long Race(long time, long distance) =>
+        Enumerable.Range(0, (int)time).Where(t => t * (time - t) > distance).Count();
 
     private static IEnumerable<long> Parse(string data) =>
         Regex.Matches(data, "[0-9]{1,}").Select(match => long.Parse(match.ToString()));
