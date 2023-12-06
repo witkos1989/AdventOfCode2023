@@ -1,6 +1,6 @@
-﻿using AdventOfCode2023.Day5;
+﻿using AdventOfCode2023.Day6;
 
-IfYouGiveASeedAFertilizer adventOfCode23 = new();
+WaitForIt adventOfCode23 = new();
 var results = adventOfCode23.Results();
 Console.WriteLine("Results: First puzzle = {0}; Second puzzle = {1};", results[0], results[1]);
 Console.ReadLine();
