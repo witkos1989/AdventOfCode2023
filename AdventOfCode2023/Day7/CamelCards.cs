@@ -15,15 +15,16 @@ public sealed class CamelCards
     }
 
     public long[] Results() =>
-        new long[] { CalculateHandsRank(_camelCards), 0 };
+        new long[] { CalculateHandsRank(_camelCards, false),
+                     CalculateHandsRank(_camelCards, true) };
 
-    private static long CalculateHandsRank(List<Cards> camelCards) =>
-        camelCards.OrderBy(c => c.GetCardStrength()).
-        ThenBy(c => c.DeckCard(0)).
-        ThenBy(c => c.DeckCard(1)).
-        ThenBy(c => c.DeckCard(2)).
-        ThenBy(c => c.DeckCard(3)).
-        ThenBy(c => c.DeckCard(4)).
+    private static long CalculateHandsRank(List<Cards> camelCards, bool joker) =>
+        camelCards.OrderBy(c => c.GetCardStrength(joker)).
+        ThenBy(c => c.DeckCard(0, joker)).
+        ThenBy(c => c.DeckCard(1, joker)).
+        ThenBy(c => c.DeckCard(2, joker)).
+        ThenBy(c => c.DeckCard(3, joker)).
+        ThenBy(c => c.DeckCard(4, joker)).
         Select((c, i) => c.GetCardsWinning(i + 1)).
         Sum();
 
