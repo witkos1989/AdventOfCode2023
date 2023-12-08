@@ -16,16 +16,22 @@ public class HauntedWasteland
         _navigation = ParseNavigation(rawData);
     }
 
-    public int[] Results() => new int[] { CountStepsToEnd(_directions, _navigation), 0 };
+    public long[] Results() =>
+        new long[] { CountStepsToEnd("AAA", "ZZZ", _directions, _navigation),
+                     CountStepsToManyEnds(_directions, _navigation) };
 
-    private static int CountStepsToEnd(char[] directions, Dictionary<string, (string, string)> navigation)
+    private static int CountStepsToEnd(
+        string start,
+        string end,
+        char[] directions,
+        Dictionary<string, (string, string)> navigation)
     {
         int count = 0;
-        string current = "AAA";
+        string current = start;
 
         for (int i = 0; i < directions.Length; i++)
         {
-            if (current == "ZZZ")
+            if (end.Length == 1 ? current.Last() == end.Last() : current == end)
                 break;
 
             (string left, string right) = navigation[current];
@@ -39,10 +45,36 @@ public class HauntedWasteland
         return count;
     }
 
+    private static long CountStepsToManyEnds(
+        char[] directions,
+        Dictionary<string, (string, string)> navigation) =>
+        LCM(navigation.Where(n => n.Key.Last() == 'A').
+            Select(n => n.Key).
+            Select(start => CountStepsToEnd(start, "Z", directions, navigation)).
+            ToArray());
+
+    private static long LCM(int[] steps)
+    {
+        long maxSteps = steps.Max();
+
+        for (long i = maxSteps; ; i += maxSteps)
+        {
+            long[] moduloResult = new long[6];
+            for (int s = 0; s < 6; s++)
+                moduloResult[s] = i % steps[s];
+
+            if (moduloResult.All(r => r == 0))
+            {
+                return i;
+            }
+        }
+    }
+
     private static char[] ParseDirections(IEnumerable<string?> data) =>
         data.First()!.ToArray();
 
-    private static Dictionary<string, (string, string)> ParseNavigation(IEnumerable<string?> data)
+    private static Dictionary<string, (string, string)> ParseNavigation(
+        IEnumerable<string?> data)
     {
         Dictionary<string, (string, string)> result = new();
 
