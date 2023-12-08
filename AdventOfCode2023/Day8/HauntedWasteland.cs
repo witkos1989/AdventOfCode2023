@@ -17,8 +17,10 @@ public class HauntedWasteland
     }
 
     public long[] Results() =>
-        new long[] { CountStepsToEnd("AAA", "ZZZ", _directions, _navigation),
-                     CountStepsToManyEnds(_directions, _navigation) };
+        new long[] {
+            CountStepsToEnd("AAA", "ZZZ", _directions, _navigation),
+            CountStepsToManyEnds(GetAllStartPositionSteps(_directions, _navigation))
+        };
 
     private static int CountStepsToEnd(
         string start,
@@ -45,13 +47,17 @@ public class HauntedWasteland
         return count;
     }
 
-    private static long CountStepsToManyEnds(
+    private static long CountStepsToManyEnds(int[] steps) =>
+        LCM(new int[] { (int)LCM(steps.Take(steps.Length / 2).ToArray()),
+                        (int)LCM(steps.Skip(steps.Length / 2).ToArray()) });
+
+    private static int[] GetAllStartPositionSteps(
         char[] directions,
         Dictionary<string, (string, string)> navigation) =>
-        LCM(navigation.Where(n => n.Key.Last() == 'A').
+        navigation.Where(n => n.Key.Last() == 'A').
             Select(n => n.Key).
             Select(start => CountStepsToEnd(start, "Z", directions, navigation)).
-            ToArray());
+            ToArray();
 
     private static long LCM(int[] steps)
     {
@@ -59,8 +65,8 @@ public class HauntedWasteland
 
         for (long i = maxSteps; ; i += maxSteps)
         {
-            long[] moduloResult = new long[6];
-            for (int s = 0; s < 6; s++)
+            long[] moduloResult = new long[steps.Length];
+            for (int s = 0; s < steps.Length; s++)
                 moduloResult[s] = i % steps[s];
 
             if (moduloResult.All(r => r == 0))
