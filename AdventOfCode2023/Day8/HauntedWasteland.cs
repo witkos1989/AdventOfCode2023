@@ -1,6 +1,6 @@
 ﻿namespace AdventOfCode2023.Day8;
 
-public class HauntedWasteland
+public sealed class HauntedWasteland
 {
     private readonly char[] _directions;
     private readonly Dictionary<string, (string, string)> _navigation;
