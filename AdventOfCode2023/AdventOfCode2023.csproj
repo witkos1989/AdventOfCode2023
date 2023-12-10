@@ -21,6 +21,7 @@
     <None Remove="Enums\" />
     <None Remove="Day8\" />
     <None Remove="Day9\" />
+    <None Remove="Day10\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Extensions\" />
@@ -36,5 +37,6 @@
     <Folder Include="Enums\" />
     <Folder Include="Day8\" />
     <Folder Include="Day9\" />
+    <Folder Include="Day10\" />
   </ItemGroup>
 </Project>
